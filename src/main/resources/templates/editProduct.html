@@ -36,6 +36,7 @@
         </thead>
         <tbody>
         <tr th:each="product: ${products}">
+            <td th:text="${product.productId}"></td>
             <td th:text="${product.productName}"></td>
             <td th:text="${product.productQuantity}"></td>
         </tr>
