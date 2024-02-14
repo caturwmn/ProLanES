@@ -47,4 +47,13 @@ public class ProductServiceImpl implements ProductService {
     assert false : "Product not found";
     return targetProduct;
   }
+  
+  @Override
+  public Product delete(String productName) {
+    Product targetProduct = find(productName);
+
+    //when target product didn't get deleted
+    assert productRepository.delete(targetProduct) : "Product couldn't be deleted";
+    return targetProduct;
+  }
 }
