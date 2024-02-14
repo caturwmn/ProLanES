@@ -28,4 +28,23 @@ public class ProductServiceImpl implements ProductService {
     productIterator.forEachRemaining(allProduct::add);
     return allProduct;
   }
+
+  @Override
+  //Function to find spesific product using Id
+  public Product find(String productName) {
+    Product targetProduct = null;
+    Iterator<Product> productIterator = productRepository.findAll();
+    
+    while (productIterator.hasNext()) {
+      targetProduct = productIterator.next();
+      if (targetProduct.getProductName().equals(productName)) {
+        return targetProduct;
+      }
+    }
+
+    //When reaching this point, 
+    //it means that the target Product isn't found
+    assert false : "Product not found";
+    return targetProduct;
+  }
 }
