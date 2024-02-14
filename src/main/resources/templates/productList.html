@@ -16,6 +16,7 @@
             <th scope="col">Product Name</th>
             <th scope="col">Quantity</th>
             <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -25,6 +26,12 @@
             <td>
                 <form th:action="@{/product/edit}" method="get">
                     <button th:name="editButton" th:value="${product.productName}" 
+                    class="btn btn-warning  btn-sm mb-3" type="submit">Edit</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/product/delete}" method="post">
+                    <button th:name="deleteButton" th:value="${product.productName}" 
                     class="btn btn-warning  btn-sm mb-3" type="submit">Edit</button>
                 </form>
             </td>
