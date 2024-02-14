@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
@@ -42,17 +42,17 @@ public class ProductController {
   }
 
   @GetMapping("/edit")
-  public String editProductPage(Model model) {
+  public String editProductPage(Model model, @RequestParam(value = "editButton") String productName) {
     Product product = new Product();
-    List<Product> allProducts = service.findAll();
     model.addAttribute("product", product);
-    model.addAttribute("products", allProducts);
+    model.addAttribute("productId", productName);
     return "editProduct";
   }
 
-  @PutMapping("/edit")
-  public String productEditPost(@ModelAttribute String productName, Product product, Model model) {
-    Product targetProduct = service.edit(productName);
+  @SuppressWarnings("null")
+  @PostMapping("/edit")
+  public String productEditPost(@RequestParam(value = "editButton") String productName, @ModelAttribute Product product, Model model) {
+    Product targetProduct = service.find(productName);
     BeanUtils.copyProperties(product ,targetProduct, "productId");
     return "redirect:list";
   }
