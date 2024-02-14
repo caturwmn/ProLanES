@@ -45,7 +45,7 @@ public class ProductController {
   public String editProductPage(Model model, @RequestParam(value = "editButton") String productName) {
     Product product = new Product();
     model.addAttribute("product", product);
-    model.addAttribute("productId", productName);
+    model.addAttribute("productName", productName);
     return "editProduct";
   }
 
@@ -60,6 +60,6 @@ public class ProductController {
   @PostMapping("/delete")
   public String productDelete(@RequestParam(value = "deleteButton") String productName, Model model) {
     service.delete(productName);
-    return "productList";
+    return "redirect:list";
   }
 }

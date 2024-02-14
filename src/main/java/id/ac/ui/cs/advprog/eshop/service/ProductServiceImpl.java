@@ -51,9 +51,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Product delete(String productName) {
     Product targetProduct = find(productName);
-
-    //when target product didn't get deleted
-    assert productRepository.delete(targetProduct) : "Product couldn't be deleted";
+    productRepository.delete(targetProduct);
     return targetProduct;
   }
 }
