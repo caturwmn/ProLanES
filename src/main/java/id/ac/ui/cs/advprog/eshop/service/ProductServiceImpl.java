@@ -41,10 +41,6 @@ public class ProductServiceImpl implements ProductService {
         return targetProduct;
       }
     }
-
-    //When reaching this point, 
-    //it means that the target Product isn't found
-    assert false : "Product not found";
     return targetProduct;
   }
   
