@@ -7,7 +7,10 @@ import java.util.UUID;
 import java.util.Iterator;
 
 @Repository
-public class CarRepository {
+public class CarRepository implements 
+  RepositoryCreate<Car>, RepositoryFindAll<Car>,
+  RepositoryFind<Car>, RepositoryUpdate<Car>,
+  RepositoryDeleteById {
   static int id = 0;
   
   private List<Car> carData = new ArrayList<>();

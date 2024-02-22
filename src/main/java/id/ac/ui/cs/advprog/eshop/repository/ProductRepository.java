@@ -8,18 +8,24 @@ import java.util.List;
 import java.util.Iterator;
 
 @Repository
-public class ProductRepository {
+public class ProductRepository implements 
+  RepositoryCreate<Product>, RepositoryFindAll<Product>,
+  RepositoryDelete<Product> {
+    
   private List<Product> productData = new ArrayList<>();
   
+  @Override
   public Product create(Product product) {
     productData.add(product);
     return product;
   }
 
+  @Override
   public Iterator<Product> findAll() {
     return productData.iterator();
   }
 
+  @Override
   public boolean delete(Product product) {
     return productData.remove(product);
   }
