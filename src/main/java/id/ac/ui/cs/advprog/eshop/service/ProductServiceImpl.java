@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Iterator;
 
 @Service
-@Qualifier("ProductService")
+@Qualifier("productService")
 public class ProductServiceImpl implements 
   ProductService, BaseService<Product> {
   
