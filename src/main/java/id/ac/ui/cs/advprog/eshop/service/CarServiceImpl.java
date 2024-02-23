@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 @Service
-public class CarServiceImpl implements CarService{
+@Qualifier("carService")
+public class CarServiceImpl implements 
+  CarService, BaseService<Car> {
 
   @Autowired
   @Qualifier("carRepository")

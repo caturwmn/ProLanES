@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import id.ac.ui.cs.advprog.eshop.model.Car;
+import id.ac.ui.cs.advprog.eshop.service.BaseService;
 import id.ac.ui.cs.advprog.eshop.service.CarService;
 import java.util.List;
 
@@ -21,6 +23,10 @@ public class CarController {
   @Autowired
   private CarService carService;
 
+  @Autowired
+  @Qualifier("carService")
+  private BaseService<Car> baseService;
+
   @GetMapping("/createCar")
   public String createCarPage(Model model) {
     Car car = new Car();
@@ -30,13 +36,13 @@ public class CarController {
 
   @PostMapping("/createCar")
   public String createCarPost(@ModelAttribute Car car, Model model) {
-    carService.create(car);
+    baseService.create(car);
     return "redirect:listCar";
   }
 
   @GetMapping("/listCar")
   public String carListPage(Model model) {
-    List<Car> allCars = carService.findAll();
+    List<Car> allCars = baseService.findAll();
     model.addAttribute("cars", allCars);
     return "CarList";
   }

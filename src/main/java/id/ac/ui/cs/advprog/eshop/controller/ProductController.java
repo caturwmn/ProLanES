@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.service.BaseService;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 import java.util.List;
 
@@ -20,6 +22,10 @@ public class ProductController {
   @Autowired
   private ProductService service;
 
+  @Autowired
+  @Qualifier("productService")
+  private BaseService<Product> baseService;
+
   @GetMapping("/create")
   public String createProductPage(Model model) {
     Product product = new Product();
@@ -29,13 +35,13 @@ public class ProductController {
 
   @PostMapping("/create")
   public String createProductPost(@ModelAttribute Product product, Model model) {
-    service.create(product);
+    baseService.create(product);
     return "redirect:list";
   }
 
   @GetMapping("/list")
   public String productListPage(Model model) {
-    List<Product> allProducts = service.findAll();
+    List<Product> allProducts = baseService.findAll();
     model.addAttribute("products", allProducts);
     return "ProductList";
   }
