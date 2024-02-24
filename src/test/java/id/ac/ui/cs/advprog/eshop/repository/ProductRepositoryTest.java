@@ -18,7 +18,7 @@ class ProductRepositoryTest {
   
   //6 usages
   @InjectMocks
-  ProductRepository productRepository;
+  ProductRepositoryImpl productRepository;
   
   @BeforeEach
   void setUP() {

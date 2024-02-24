@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
+import id.ac.ui.cs.advprog.eshop.service.BaseService;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 
 import static org.hamcrest.Matchers.containsString;
@@ -37,6 +38,9 @@ public class ProductControllerTest {
   @MockBean
   private ProductService productService;
 
+  @MockBean
+  private BaseService<Product> baseService;
+
   @Autowired
   private ObjectMapper objectMapper;
 
@@ -47,7 +51,7 @@ public class ProductControllerTest {
         andExpect(content().string(containsString("<!DOCTYPE html>")));
 
     Product product = new Product();
-    Mockito.when(productService.create(ArgumentMatchers.any())).thenReturn(product);
+    Mockito.when(baseService.create(ArgumentMatchers.any())).thenReturn(product);
     
     this.mockMvc.perform(post("/product/create").contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(product))).andDo(print()).andExpect(status().is3xxRedirection());
@@ -55,7 +59,7 @@ public class ProductControllerTest {
     List<Product> products = new ArrayList();
     products.add(product);
 
-    Mockito.when(productService.findAll()).thenReturn(products);
+    Mockito.when(baseService.findAll()).thenReturn(products);
 
     this.mockMvc.perform(get("/product/list")).andDo(print()).andExpect(status().isOk()).
         andExpect(content().string(containsString("<!DOCTYPE html>")));

@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
+import id.ac.ui.cs.advprog.eshop.repository.ProductRepositoryImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,7 +19,7 @@ import java.util.List;
 class ProductServiceTest {
 
   @Spy
-  private ProductRepository productRepository = new ProductRepository(); 
+  private ProductRepositoryImpl productRepository = new ProductRepositoryImpl(); 
 
   @InjectMocks
   private ProductServiceImpl productService = new ProductServiceImpl();
