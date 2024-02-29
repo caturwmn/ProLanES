@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import net.bytebuddy.asm.Advice.OffsetMapping.Factory.Illegal;
 
+@SuppressWarnings("unused")
 class OrderTest {
   private List<Product> products;
   
@@ -29,6 +29,7 @@ class OrderTest {
     this.products.add(product2);
   }
 
+  @SuppressWarnings("unused")
   @Test
   void testCreateOrderEmptyProduct() {
     this.products.clear();
@@ -62,6 +63,7 @@ class OrderTest {
     assertEquals("SUCCESS", order.getStatus());
   }
 
+  @SuppressWarnings("unused")
   @Test
   void testCreateOrderInvalidStatus() {
     assertThrows(IllegalArgumentException.class, () -> {
