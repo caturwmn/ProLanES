@@ -9,14 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import id.ac.ui.cs.advprog.eshop.service.BaseService;
-import id.ac.ui.cs.advprog.eshop.service.ProductService;
+import id.ac.ui.cs.advprog.eshop.service.ProductServiceImpl;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,17 +29,13 @@ import java.util.ArrayList;
 @WebMvcTest(ProductController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 public class ProductControllerTest {
   
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private ProductService productService;
-
-  @MockBean
-  private BaseService<Product> baseService;
+  private ProductServiceImpl productService;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -53,7 +47,7 @@ public class ProductControllerTest {
         andExpect(content().string(containsString("<!DOCTYPE html>")));
 
     Product product = new Product();
-    Mockito.when(baseService.create(ArgumentMatchers.any())).thenReturn(product);
+    Mockito.when(productService.create(ArgumentMatchers.any())).thenReturn(product);
     
     this.mockMvc.perform(post("/product/create").contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(product))).andDo(print()).andExpect(status().is3xxRedirection());
@@ -61,7 +55,7 @@ public class ProductControllerTest {
     List<Product> products = new ArrayList();
     products.add(product);
 
-    Mockito.when(baseService.findAll()).thenReturn(products);
+    Mockito.when(productService.findAll()).thenReturn(products);
 
     this.mockMvc.perform(get("/product/list")).andDo(print()).andExpect(status().isOk()).
         andExpect(content().string(containsString("<!DOCTYPE html>")));
