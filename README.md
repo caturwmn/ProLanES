@@ -1,5 +1,34 @@
 # ProLanES
 
+## Refleksi Modul 4:
+1. Berdasarkan bab "Evaluating Your Test Objective" oleh Percival(2017). bisa dievaluasi hal-hal berikut:
+
+  - Correctness:
+    Jumlah test yang ada sudah cukup untuk mengevaluasi seberapa besar aplikasi tersebut bekerja karena sudah mencakup happy dan unhappy test yang juga merupakan bagian dari edge case. Namun saya belum menerapkan 100% persen code coverage pada aplikasi ini.
+    Selain itu test yang dibuat pada modul ini sepertinya tidak mengetes integrasi dari komponen-komponen yang ada karena hanya berupa unit test dengan menggunakan mosk untuk mendapat respon tes yang diinginkan.
+
+  - Maintainability:
+    Test-test yang dibuat sebenarnya bisa direfactor apabila diperlukan dengan memisahkan test-test tersebut menjadi beberapa file yang mengetes fitur tertentu dari sebuah class. Sehingga masih ada cukup banyak ruang untuk beberapa perbaikan.
+
+  - Productive Workflow:
+    Terkait kecepatan sendiri, semua test yang dilakukan terasa jauh lebih lama dari kecepatan ideal. Kemungkina besar untuk mempercepat waktu pengerjaan test, saya harus berusaha untuk menggunakan lebih banyak mock class pada file test sebelum modul ini dan/atau mengintegrasikan happy path dan unhappy path untuk meminimalisir penggunaan fungsi yang sama. Namun, dalam waktu yang sama, saya bisa saja melakukan testing pada bagian yang perlu melalui IDE saya sehingga tidak perlu menjalankan semua test jika yang diperlukan adalah testing pada bagian tertentu.
+
+2. Terkait F.I.R.S.T. principle, berikut adalah analisis saya terhadap kode saya:
+  - Fast principle:
+    Kecepatan untuk menjalankan test bisa dibilang mengganggu alur kerja saya karena lumayan lama. Namun dalam waktu yang sama saya tidak bisa membedakan kecepatan apa yang cepat atau lambat dalam testing.
+
+  - Independent principle:
+    Semua test pada aplikasi ini sudah menerapkan independent principle karena semua test yang dijalankan tidak mengganggu alur test lainnya dan tidak juga menggunakan resource dari test case lainnya (seperti variabel dan lain-lain).
+
+  - Repeatability:
+    Semua test sudah bersifat repeatable dengan hasil yang konsisten selama tidak ada perubahan tambahan pada aplikasi yang mempegaruhi logika aplikasi.
+
+  - Self-Validating:
+    Semua test sudah menggunakan assertion untuk memvalidasi hasil kerja test secara otomatis sehingga bisa dibilang prinsip tersebut sudah terpenuhi.
+
+  - Thorough:
+    Test yang telah dibuat saya rasa sudah cukup memvalidasi happy test, Namun saya rasa masih ada jauh lebih banyak unhappy test yang mungkin sehingga saya rasa test-test tersebut kurang thorough.
+
 ## Refleksi Modul 3:
 1. Prinsip-prinsip SOLID yang saya implementasikan pada proyek saya adalah:
 
