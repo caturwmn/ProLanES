@@ -1,9 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
-import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentMethods;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
-import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import java.util.List;
 
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,7 +39,7 @@ class PaymentRepositoryTest {
     Payment payment = payments.get(1);
     Payment result = paymentRepository.save(payment);
 
-    Payment findResult = paymentRepository.findById(payment.get(1).getId());
+    Payment findResult = paymentRepository.findById(payments.get(1).getId());
     assertEquals(payment.getId(), result.getId());
     assertEquals(payment.getId(), findResult.getId());
     assertEquals(payment.getMethod(), findResult.getMethod());
@@ -72,7 +69,7 @@ class PaymentRepositoryTest {
       paymentRepository.save(payment);
     }
 
-    Order findResult = paymentRepository.findById("whydoesthishappenstome");
+    Payment findResult = paymentRepository.findById("whydoesthishappenstome");
     assertNull(findResult);
   }
 
@@ -85,6 +82,6 @@ class PaymentRepositoryTest {
     List<Payment> paymentList = paymentRepository.getAll();
     assertEquals(2, paymentList.size());
     assertEquals(payments.get(0).getId(), paymentList.get(0).getId());
-    assertEquals(payments.get(1).getId(), paymentList.get(1).getId());s
+    assertEquals(payments.get(1).getId(), paymentList.get(1).getId());
   }
 }
