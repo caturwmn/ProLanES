@@ -4,8 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethods;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 
 @Builder
 @Getter
@@ -18,15 +19,11 @@ public class Payment {
 
   public Payment(String id, String method, Map<String,String> paymentData) {
     this.id = id;
-    this.status = "WAITING";
+    this.status = PaymentStatus.WAITING.getValue();
     this.paymentData = paymentData;
-
-    List<String> methods = new ArrayList<>();
-    methods.add("Voucher Code");
-    methods.add("Cash On Delivery");
         
-    if (methods.contains(method)) {
-      this.method = "Voucher Code";
+    if (PaymentMethods.contains(method)) {
+      this.method = method;
     } else {
       throw new IllegalArgumentException();
     }
@@ -35,12 +32,7 @@ public class Payment {
   public Payment(String id, String method, String status, Map<String,String> paymentData) {
     this(id, method, paymentData);
 
-    List<String> statuses = new ArrayList<>();
-    statuses.add("WAITING");
-    statuses.add("SUCCESS");
-    statuses.add("REJECTED");
-
-    if (statuses.contains(status)) {
+    if (PaymentStatus.contains(status)) {
       this.status = status;
     } else {
       throw new IllegalArgumentException();
@@ -48,12 +40,7 @@ public class Payment {
   }
 
   public void setStatus(String status) {
-    List<String> statuses = new ArrayList<>();
-    statuses.add("WAITING");
-    statuses.add("SUCCESS");
-    statuses.add("REJECTED");
-
-    if(statuses.contains(status)) {
+    if(PaymentStatus.contains(status)) {
       this.status = status;
     } else {
       throw new IllegalArgumentException();
