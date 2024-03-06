@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,6 +20,16 @@ class PaymentRepositoryTest {
   PaymentRepository paymentRepository;
   List<Payment> payments;
   Map<String,String> map;
+
+  boolean compare(Payment payment1, Payment payment2) {
+    if (payment1.getId().equals(payment2.getId()) && 
+        payment1.getMethod().equals(payment2.getMethod()) &&
+        payment1.getStatus().equals(payment2.getStatus())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @BeforeEach
   void setUp() {
@@ -41,9 +52,7 @@ class PaymentRepositoryTest {
 
     Payment findResult = paymentRepository.findById(payments.get(1).getId());
     assertEquals(payment.getId(), result.getId());
-    assertEquals(payment.getId(), findResult.getId());
-    assertEquals(payment.getMethod(), findResult.getMethod());
-    assertEquals(payment.getStatus(), findResult.getStatus());
+    assertTrue(compare(payment, findResult));
     assertEquals(payment.getPaymentData(), findResult.getPaymentData());
   }
 
@@ -59,7 +68,7 @@ class PaymentRepositoryTest {
     assertEquals(payment.getId(), findResult.getId());
     assertEquals(payment.getId(), findResult.getId());
     assertEquals(payment.getMethod(), findResult.getMethod());
-    assertEquals(result.getStatus(), findResult.getStatus());
+    assertTrue(compare(result, findResult));
     assertEquals(PaymentStatus.SUCCESS.getValue(), findResult.getStatus());
   }
 
@@ -81,7 +90,7 @@ class PaymentRepositoryTest {
 
     List<Payment> paymentList = paymentRepository.getAll();
     assertEquals(2, paymentList.size());
-    assertEquals(payments.get(0).getId(), paymentList.get(0).getId());
-    assertEquals(payments.get(1).getId(), paymentList.get(1).getId());
+    assertTrue(compare(payments.get(0), paymentList.get(0)));
+    assertTrue(compare(payments.get(1), paymentList.get(1)));  
   }
 }
