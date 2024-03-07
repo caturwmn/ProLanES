@@ -11,6 +11,7 @@ import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethods;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 
 public class PaymentServiceImpl implements PaymentService {
@@ -21,48 +22,19 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public Payment addPayment(Order order, String method, 
     Map<String, String> paymentData){
-      
-    String id = UUID.randomUUID().toString();
-    String number = "0123456789";
-    switch(method) {
-      case "Voucher Code":
-        String code = paymentData.get("voucherCode");
-        int count = 0;
-        if (code.length() != 16) {
-          throw new IllegalArgumentException();
-        } else {
-          if (code.substring(0, 5).equals("ESHOP")) {
-            for (char letter : code.toCharArray()) {
-              if (number.contains(String.valueOf(letter))) {
-                count += 1;
-              }
-            }
-            if (count != 8) {
-              throw new IllegalArgumentException();
-            }
-          } else {
-            throw new IllegalArgumentException();
-          }
-        }
+    if (method.equals(PaymentMethods.VC.getValue())) {
+      String code = paymentData.get("voucherCode");
+      validateVoucher(code);
+      return save(order, method, paymentData);
 
-        paymentOrders.put(id, order);   
-        return paymentRepository.save(new Payment(
-          id, method, paymentData));
-      
-      case "Cash On Destination":
-        String adress = paymentData.get("adress");
-        String deliveryFee = paymentData.get("deliveryFee");
-        if (adress == null || deliveryFee == null) {
-          throw new IllegalArgumentException();
-        } else if (adress.isEmpty() || deliveryFee.isEmpty()) {
-          throw new IllegalArgumentException();  
-        } else {
-          paymentOrders.put(id, order);   
-          return paymentRepository.save(new Payment(
-            id, method, paymentData));
-        }
-      default:
-        throw new IllegalArgumentException();
+    } else if (method.equals(PaymentMethods.COD.getValue())) {
+      String adress = paymentData.get("adress");
+      String deliveryFee = paymentData.get("deliveryFee");
+      validateCOD(adress, deliveryFee);
+      return save(order, method, paymentData);
+
+    } else {
+      throw new IllegalArgumentException();
     }
   }
 
@@ -91,5 +63,40 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public List<Payment> getAllPayments() {
     return paymentRepository.getAll();
+  }
+
+  public void validateVoucher(String voucherCode) {
+    int count = 0;
+    String numbers = "1234567890";
+    if (voucherCode.length() != 16 ||
+        !voucherCode.substring(0, 5).
+        equals("ESHOP")
+      ) {
+      throw new IllegalArgumentException();
+    } else {
+      for (char letter : voucherCode.toCharArray()) {
+        if (numbers.contains(String.valueOf(letter))) {
+          count += 1;
+        }
+      }
+      if (count != 8) {
+        throw new IllegalArgumentException();
+      }
+    }
+  }
+
+  public void validateCOD(String adress, String deliveryFee) {
+    if (adress == null || deliveryFee == null) {
+      throw new IllegalArgumentException();
+    } else if (adress.isEmpty() || deliveryFee.isEmpty()) {
+      throw new IllegalArgumentException();  
+    }
+  }
+
+  public Payment save(Order order, String method, Map<String,String> paymentData) {
+    String id = UUID.randomUUID().toString();
+    paymentOrders.put(id, order);   
+    return paymentRepository.save(new Payment(
+      id, method, paymentData));
   }
 }

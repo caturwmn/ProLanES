@@ -77,10 +77,8 @@ class PaymentServiceImplTest {
   void testAddPayment() {
     Payment payment = payments.get(1);
     lenient().doReturn(payment).when(paymentRepository).save(payment);
-    lenient().doReturn(payment.getPaymentData()).when(paymentOrders).get(anyString());
 
-    Payment result = paymentService.addPayment(order, 
-      payment.getMethod(), payment.getPaymentData());
+    paymentService.addPayment(order, payment.getMethod(), payment.getPaymentData());
     verify(paymentRepository, times(1)).save(any(Payment.class));
   }
 
