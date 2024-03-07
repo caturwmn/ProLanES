@@ -2,8 +2,10 @@ package id.ac.ui.cs.advprog.eshop.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import id.ac.ui.cs.advprog.eshop.enums.PaymentMethods;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
@@ -16,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -24,14 +28,17 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@ExtendWith(MockitoExtension.class)
 class PaymentServiceImplTest {
   @InjectMocks
   PaymentServiceImpl paymentService;
 
   @Mock
   PaymentRepository paymentRepository;
+
+  @Mock
+  HashMap<String, Order> paymentOrders;
 
   List<Payment> payments;
   Order order;
@@ -69,34 +76,35 @@ class PaymentServiceImplTest {
   @Test
   void testAddPayment() {
     Payment payment = payments.get(1);
-    doReturn(payment).when(paymentRepository).save(payment);
+    lenient().doReturn(payment).when(paymentRepository).save(payment);
+    lenient().doReturn(payment.getPaymentData()).when(paymentOrders).get(anyString());
 
-    Payment result = paymentService.addPayment(order, payment);
-    verify(paymentRepository, times(1)).save(payment);
-    assertEquals(payment.getId(), result.getId());
+    Payment result = paymentService.addPayment(order, 
+      payment.getMethod(), payment.getPaymentData());
+    verify(paymentRepository, times(1)).save(any(Payment.class));
   }
 
   @Test
   void testAddPaymentIfVCIfInvalid() {
-    Payment payment = payments.get(0);
     Map<String,String> mapVCInvalid = new HashMap<>();
     mapVCInvalid.put("voucherCode", "BAJAK192745ADA12");
-    payment.setPaymentData(mapVCInvalid);
     assertThrows(IllegalArgumentException.class, 
-      () -> paymentService.addPayment(order, payment));
+      () -> paymentService.addPayment(order, 
+        PaymentMethods.VC.getValue(), mapVCInvalid
+    ));
 
     verify(paymentRepository, times(0)).save(any(Payment.class));
   }
 
   @Test
   void testAddPaymentIfCODIfInvalid() {
-    Payment payment = payments.get(1);
     Map<String,String> mapCODInvalid = new HashMap<>();
     mapCODInvalid.put("address", null);
     mapCODInvalid.put("deliveryFee", null);
-    payment.setPaymentData(mapCODInvalid);
     assertThrows(IllegalArgumentException.class, 
-      () -> paymentService.addPayment(order, payment));
+      () -> paymentService.addPayment(order,
+        PaymentMethods.COD.getValue(), mapCODInvalid
+      ));
 
     verify(paymentRepository, times(0)).save(any(Payment.class));
   }
@@ -106,7 +114,7 @@ class PaymentServiceImplTest {
     Payment payment = payments.get(0);
     Payment result = new Payment(payment.getId(), payment.getMethod(), 
       PaymentStatus.SUCCESS.getValue(),mapVC);
-    doReturn(result).when(paymentRepository).save(result);
+    doReturn(order).when(paymentOrders).get(anyString());
     paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
     assertEquals(PaymentStatus.SUCCESS.getValue(), result.getStatus());
   }
@@ -115,20 +123,20 @@ class PaymentServiceImplTest {
   void testGetPaymentIfValid() {
     Payment payment = payments.get(1);
     doReturn(payment).when(paymentRepository).findById(payment.getId());
-    Payment result = paymentService.findById(payment.getId());
+    Payment result = paymentService.getPayment(payment.getId());
     assertEquals(payment.getId(), result.getId());
   }
 
   @Test
   void testGetPaymentIfInvalid() {
-    doReturn(null).when(orderRepository).findById("zczc");
-    assertNull(orderService.findById("zczc"));
+    doReturn(null).when(paymentRepository).findById("zczc");
+    assertNull(paymentService.getPayment("zczc"));
   }
 
   @Test
   void testGetAllPayments() {
     doReturn(payments).when(paymentRepository).getAll();
-    List<Payment> result = paymentService.testGetAllPayments();
+    List<Payment> result = paymentService.getAllPayments();
     assertEquals(2, result.size());
   }
 }
